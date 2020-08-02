@@ -1,2 +1,2 @@
-![Raspberry Pis](pis.jpeg)
+![Raspberry Pis](https://github.com/mjpitz/mjpitz/raw/main/pis.jpeg)
 ![Google Analytics](https://www.google-analytics.com/collect?v=1&tid=UA-172921913-1&cid=555&t=pageview&ec=repo&ea=open&dp=%2F&dt=%2F)
