@@ -174,9 +174,9 @@
     \end{itemize}
 
     Double-entry systems are often implemented as a ledger.
-    This allows systems to track transactions for a given account or user.
+    This allows the system to track transactions for a given account.
     In this solution, we augment the traditional approach to double-entry bookkeeping with hierarchy.
-    This is done to model the real-world exchange of resources.
+    This is done to model the real-world exchange of resources between groups.
     Consider Figure \ref{figure:2}.
 
     \begin{figure}[H]
@@ -223,7 +223,7 @@
         payer & Who received services (from) \\
         payee & Who provides services (to) \\
         type & A debit or credit \\
-        amount & Amount of money (millicents) \\
+        usage & Usage in basis points \\
         urn & A uniform resource name \\
         tags & Organization specific metadata \\
         detail & A break down of charges
@@ -235,11 +235,16 @@
 
   \subsection*{Apportioning Resources}
 
-    Testing
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\linewidth]{./truth-and-reconciliation-graph-weighted.png}
+      \caption{Weighted exchange of service graph}
+      \label{figure:3}
+    \end{figure}
 
   \subsection*{Over-commit}
 
-    Over-commit puts infrastructure owners in a rather perca
+    TBD
 
 
 \section*{Verification}
