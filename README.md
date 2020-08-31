@@ -2,9 +2,11 @@
 
 ### Welcome! My name is Mya [[🔈 pronunciation]]
 
-* 🏢 Principal Engineer at [Indeed] working on infrastructure systems.
-* 💡 Founder of [deps.cloud], a system for navigating and analyzing dependency graphs.
-* 💻 Technical writer and [blogger](https://mjpitz.com)
+* ✊🏿 Black lives matter
+* 🏳️‍🌈 Diversity makes us stronger
+* 🏢 Principal Engineer at [Indeed] working on infrastructure systems
+* 💡 Founder of [deps.cloud], a system for navigating and analyzing dependency graphs
+* 💻 Technical writer, [blogger](https://mjpitz.com), and presenter
 * 📛 Pronouns: [she / her]
 
 ---
