@@ -1,6 +1,7 @@
 \documentclass[10pt, a4paper, twocolumn]{article}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{amsmath}
 
 \title{Reconciling organizational cost across business units}
 \author{Mya Pitzeruse}
@@ -82,7 +83,8 @@
   It allows additional layers to be added progressively, allowing organizations to get more granular over time.
 
 \section*{Concepts}
-  Much of the solution design is based on these fundamental concepts.
+  This section contains concepts that are fundamental to the solution.
+  Understanding them will help map them to potential internal concepts.
 
   \subsection*{Resources}
     Workloads require resources to run.
@@ -96,8 +98,8 @@
   \subsection*{Standard Units of Measure}
     With anything we measure, standardization and documentation of units is important.
     Without it, one group of engineers might code against one while the others code against another.
-    While this paper works from a known set of resources, the concept of a resource should be pluggable itself.
-    This includes both the representation of and cost of a given resource.
+    While this paper works from a known set of resources, the concept of a resource should be configurable.
+    This includes both the representation and cost of a given resource.
     The standardized units of measure used throughout this paper are as follows:
 
     \begin{itemize}
@@ -108,6 +110,7 @@
       \item \textbf{Transport} is measured in \textbf{bytes}
       \item \textbf{Time} is measured in \textbf{milliseconds}
       \item \textbf{Cost} is measured in \textbf{millicents} (USD)
+      \item An \textbf{API} is measured in \textbf{requests per second}
     \end{itemize}
 
     Finer grained units can be used if needed.
@@ -202,13 +205,93 @@
   The second approach is to use a basis point type of system.
   This approach allows you to represent the underlying usage as a percentage.
   One problem with this approach is that when you scale a cluster up, usage goes down.
-  If product owners look at raw basis points, they'll see a decrease in their usage.
+  This is because the increase in available resources changes what percentage of the cluster you use.
   This can be really confusing if you haven't deployed changes recently.
 
   At the end of the day, we need a combination of these approaches.
   Basis points should be used to apportion out usage at each tier.
   When displaying or analyzing information, a currency value should be used.
   This approach allows for the most accurate representation of a given products cost.
+
+  \subsection*{Apportioning Usage}
+    Apportioning usage of a platform is the process of dividing a single pool of resources amongst consumers.
+    This is done using basis points in order to address issues with things like over-commit.
+    When using a non-basis point model, over-commit often results in an over-charge of resources.
+    This means that a given product could become cashflow-positive.
+    While this may be the goal of any user facing product, it's often not the goal of apportioning.
+
+    In order to establish the proper basis points, we must first know what the total available resources are.
+    This is done by taking the maximum of what is available (common case) and what is reserved (over-commit).
+    This will need to be done across all resources you want to apportion out.
+    The equations below can be used to compute the total availability of a given resource.
+
+    \begin{gather*}
+      reserved(resource) = \sum^{workload}_{workloads} max(reserved, usage) \\
+      total(resource) = max(available, reserved)
+    \end{gather*}
+
+    Once you've computed the total amount of a given resource, you should be able to start distributing basis points.
+    The equation below demonstrates how to calculate basis points for a single resource.
+
+    \begin{gather*}
+      usage(resource) = \frac{max(reserved, usage)}{total(resource)} * 100
+    \end{gather*}
+
+    While this approach generally works, things start to get more complicated with multiple resources.
+    It's entirely possible that a single workload might consume all the GPU while reserving a small amount of CPU/memory.
+    How do you trade-off between each of the available resources?
+    Let us consider the following allocations.
+
+    \begin{itemize}
+      \item \textit{10000} basis points from \textbf{GPU} reservations
+      \item \textit{1000} basis points from \textbf{CPU} reservations
+      \item \textit{3000} basis points from \textbf{memory} reservations
+    \end{itemize}
+
+    Since we know the sample size for each resource group is the same, we can safely use an average function.
+    If we took the average of these resources, we would end up with \textit{4666} basis points.
+    Suppose this cluster was made of two resources and the other reserves the remaining resources.
+    Their average would be \textit{5333} basis points.
+    This will allow us to annotate every edge between products with a weight.
+    Figure~\ref{figure:3} below illustrates a fully decorated graph.
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\linewidth]{./truth-and-reconciliation-graph-weighted.png}
+      \caption{Weighted exchange of service graph}
+      \label{figure:3}
+    \end{figure}
+
+  \subsection*{Reconciling Cost}
+
+    \begin{gather*}
+        productCost(product) = \sum^{path}_{paths} pathCost(path) \\
+        pathCost(path) = rootCost(path) \times \prod^{edge}_{path} (usage / 100) \\
+        rootCost(path) = path[len(path) - 1].cost
+    \end{gather*}
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\linewidth]{./truth-and-reconciliation-reconcile-d.png}
+      \caption{Reconcile for product D}
+      \label{figure:4}
+    \end{figure}
+
+    \[ productCost(D) = cost(A) \times 0.4 \times 0.4 \]
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\linewidth]{./truth-and-reconciliation-reconcile-e.png}
+      \caption{Reconcile for product E}
+      \label{figure:5}
+    \end{figure}
+
+    \begin{gather*}
+        pathCost(1) = cost(A) \times 0.4 \times 0.5 \\
+        pathCost(2) = cost(A) \times 0.6 \times 0.3 \\
+        pathCost(3) = cost(A) \times 0.6 \times 0.4 \times 0.5 \\
+    \end{gather*}
+
 
   \subsection*{The Ledger}
 
@@ -233,28 +316,8 @@
     \end{table}
 
 
-  \subsection*{Apportioning Resources}
-
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=\linewidth]{./truth-and-reconciliation-graph-weighted.png}
-      \caption{Weighted exchange of service graph}
-      \label{figure:3}
-    \end{figure}
-
   \subsection*{Over-commit}
 
     TBD
-
-
-\section*{Verification}
-
-  As we are discussing a financial system, we have to discuss the math behind some of this.
-
-  \[ resource = \{ measure, cost \} \]
-
-  \[ costmodel = \{ resource, ... \} \]
-
-
 
 \end{document}
