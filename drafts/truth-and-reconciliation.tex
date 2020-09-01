@@ -19,9 +19,9 @@
 
 
 \section*{Introduction}
-  Workloads run across a variety of platforms.
-  Many systems use a combination of these platforms to perform work efficiently.
-  Figure \ref{figure:1} demonstrates how you might use platforms like Apache Hadoop, Kubernetes, and other managed services to build a product.
+  Products run across a variety of platforms.
+  Many use a combination of platforms to perform work efficiently.
+  Figure~\ref{figure:1} demonstrates how you might use platforms like Apache Hadoop, Kubernetes, and other managed services to build a product.
 
   \begin{figure}[H]
     \centering
@@ -30,19 +30,19 @@
     \label{figure:1}
   \end{figure}
 
-  When an organization is small, they're often less concerned about attributing spend to their workloads.
+  When an organization is small, they're often less concerned about attributing spend to their products.
   As an organization grows, they often add new products to complement their existing offerings.
   With each new product, this figure grows more complex.
   As this figure grows more complex, the need to attributing spend increases as well.
   Executives often want to know how much each of their products cost to run and what their return on investment is.
   When asked for this information, engineering leaders need to take time to track down all this information.
 
-  Solutions like CloudTamer help organizations better manage their spend on cloud providers, but lack visibility into clustered environments.
-  In cluster solutions like kubecost provide visibility into the cost of Kubernetes workloads, but miss managed resources.
+  Solutions like \textit{CloudTamer} help organizations better manage their spend on cloud providers, but lack visibility into clustered environments.
+  In cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods, but miss managed services.
   In the end, you wind up back to where you started.
   Needing to query multiple sources for information.
 
-  While these may represent common cases, it fails to account for less common cases.
+  While these account for common cases, it fails to consider less common ones.
   Suppose one part of your organization runs a service on behalf of the rest.
   You might want to apportion usage of that service out to it's heaviest consumers.
   Throughout the course of my research, I found that no (if not few) comprehensive solutions exist.
@@ -57,8 +57,8 @@
   The first effort was geared toward a short-term migration.
   It would allow us to move off Apache Mesos while preserving the overall structure of our ecosystem.
   The second was tasked with figuring out how to run upstream Kubernetes safely and securely.
-  As we underwent these migrations, teams started to build in cost attribution.
-  The idea was to use these reports for some comparative analysis when switching platforms.
+  As we migrated to Kubernetes, teams built out some cost attribution.
+  The hope was to report on changes in products between platforms as well as provide transparency to resource use.
 
   Similar questions were raised as we began our journey to the the cloud.
   During this time, I considered several solutions.
@@ -73,34 +73,39 @@
   In doing soIn doing so, I was able to identify commonalities across each of them.
 
   \begin{itemize}
+    \item Products are composed of one or more workloads
+    \item Workloads have an identifier (often unique to the platform) and require resources to run
     \item Resources between each data set varied with some commonality (CPU, memory, disk)
-    \item Workloads have an identifier, often unique to the platform
     \item Each data set represented an exchange of services between one group and their customers
   \end{itemize}
 
   These discoveries lead to the design a development of a common reporting platform.
-  This platform is designed with decomposition in mind.
-  It allows additional layers to be added progressively, allowing organizations to get more granular over time.
+  The platform is designed with decomposition in mind.
+  It allows additional layers to be added progressively, allowing organizations to add granularity over time.
 
 \section*{Concepts}
   This section contains concepts that are fundamental to the solution.
   Understanding them will help map them to potential internal concepts.
 
+  \subsection*{Workloads}
+    Products are composed of one or more workloads.
+    Workloads represent a variety of processes an organization might run.
+    They can be a long running, public facing web services or background jobs.
+    Workloads can run across a variety of platforms but are often deployed to just one.
+
   \subsection*{Resources}
     Workloads require resources to run.
     Common cases need things like CPU, memory, and occasionally disk.
-    At the same time, it's important that these resources are made available through a variety of platforms.
+    At the same time, it's important that resources are made available through a variety of platforms.
     Kubernetes allows containers to reserve resources and it finds room within the cluster to run.
-    Similarly, virtual machines can be used to allocate these resources, while also providing virtualized hardware.
+    Similarly, virtual machines can be used to allocate resources, while also providing virtualized hardware.
     Regardless of where and how the workloads run, resources are uniform.
     They are measured using standardized units and typically come at some cost.
 
   \subsection*{Standard Units of Measure}
     With anything we measure, standardization and documentation of units is important.
-    Without it, one group of engineers might code against one while the others code against another.
-    While this paper works from a known set of resources, the concept of a resource should be configurable.
-    This includes both the representation and cost of a given resource.
-    The standardized units of measure used throughout this paper are as follows:
+    Without it, one group might code against one standard while another codes using a second.
+    Some standardized units of measure include:
 
     \begin{itemize}
       \item \textbf{CPU} is measured in \textbf{millicores}
@@ -109,7 +114,6 @@
       \item \textbf{Disk} is measured in \textbf{bytes} and \textbf{iops}
       \item \textbf{Transport} is measured in \textbf{bytes}
       \item \textbf{Time} is measured in \textbf{milliseconds}
-      \item \textbf{Cost} is measured in \textbf{millicents} (USD)
       \item An \textbf{API} is measured in \textbf{requests per second}
     \end{itemize}
 
@@ -128,16 +132,16 @@
     \end{itemize}
 
     To help understand this concept a bit more, let's consider an example using RFCs.
-    The following is URN for RFC-2141, the specification for URNs.
+    The following URN is for RFC-2141, the specification for URNs.
 
 \begin{verbatim}
   urn:ietf:rfc:2141
 \end{verbatim}
 
-    This URN uses the \texttt{ietf} namespace with the \texttt{rfc} namespace-specific string.
+    This URN uses the \textit{ietf} namespace with the \textit{rfc} namespace-specific string.
     In order to ensure global uniqueness, namespaces must be registered with the Internet Assigned Numbers Authority (IANA.)
     Since most organizations will keep this information internally, the need to register the namespace is less of a requirement.
-    For simplicity, we will use the \texttt{costrecon} namespace.
+    For simplicity, we will use the \textit{costrecon} namespace.
     This namespace has \textbf{not} been registered and only serves as demonstration.
 
     A URN in this document refers to specific workloads.
@@ -148,6 +152,7 @@
     The block below enumerates several examples of further namespacing by class and kind.
 
 \begin{verbatim}
+  urn:costrecon:aws:642135246531
   urn:costrecon:compute:host:appname
   urn:costrecon:compute:vm:appname
   urn:costrecon:compute:pod:appname
@@ -180,7 +185,7 @@
     This allows the system to track transactions for a given account.
     In this solution, we augment the traditional approach to double-entry bookkeeping with hierarchy.
     This is done to model the real-world exchange of resources between groups.
-    Consider Figure \ref{figure:2}.
+    Consider Figure~\ref{figure:2}.
 
     \begin{figure}[H]
       \centering
@@ -190,8 +195,8 @@
     \end{figure}
 
     This graph shows how projects can build upon one another to deliver value to the business.
-    For example, product E uses services provided by product B, C, and F.
-    At the end of the day, we want to ensure product E is attributed the resources that they use.
+    For example, E uses services provided by B, C, and F.
+    At the end of the day, we want to ensure E is attributed the resources that they consume.
 
 \section*{Implementation}
   When it comes to implementation, I've found there are two schools fo thought.
@@ -208,7 +213,7 @@
   This is because the increase in available resources changes what percentage of the cluster you use.
   This can be really confusing if you haven't deployed changes recently.
 
-  At the end of the day, we need a combination of these approaches.
+  At the end of the day, we need a combination of approaches.
   Basis points should be used to apportion out usage at each tier.
   When displaying or analyzing information, a currency value should be used.
   This approach allows for the most accurate representation of a given products cost.
@@ -226,34 +231,34 @@
     The equations below can be used to compute the total availability of a given resource.
 
     \begin{gather*}
-      reserved(resource) = \sum^{workload}_{workloads} max(reserved, usage) \\
-      total(resource) = max(available, reserved)
+      T_{reserved} = \sum^{workloads}_{W} max(W_{reserved}, W_{usage}) \\
+      \\
+      T = max(T_{available}, T_{reserved}) \\
     \end{gather*}
 
     Once you've computed the total amount of a given resource, you should be able to start distributing basis points.
-    The equation below demonstrates how to calculate basis points for a single resource.
+    The equation below demonstrates how to calculate basis points for a single resource for a single workload.
 
     \begin{gather*}
-      usage(resource) = \frac{max(reserved, usage)}{total(resource)} * 100
+      basispoints = \frac{max(reserved, usage)}{T} * 100 \\
     \end{gather*}
 
-    While this approach generally works, things start to get more complicated with multiple resources.
-    It's entirely possible that a single workload might consume all the GPU while reserving a small amount of CPU/memory.
-    How do you trade-off between each of the available resources?
+    At the end, we have a set of basis points for each resource we want to charge for.
+    We need to convert this set of basis points to a single basis point.
+    Since we know the sample size for each resource group is the same, we can safely use an average.
     Let us consider the following allocations.
 
     \begin{itemize}
-      \item \textit{10000} basis points from \textbf{GPU} reservations
-      \item \textit{1000} basis points from \textbf{CPU} reservations
-      \item \textit{3000} basis points from \textbf{memory} reservations
+      \item \textbf{10000} basis points from GPU reservations
+      \item \textbf{1000} basis points from CPU reservations
+      \item \textbf{3000} basis points from memory reservations
     \end{itemize}
 
-    Since we know the sample size for each resource group is the same, we can safely use an average function.
-    If we took the average of these resources, we would end up with \textit{4666} basis points.
-    Suppose this cluster was made of two resources and the other reserves the remaining resources.
-    Their average would be \textit{5333} basis points.
-    This will allow us to annotate every edge between products with a weight.
-    Figure~\ref{figure:3} below illustrates a fully decorated graph.
+    The above workload averages out with \textbf{4667} basis points.
+    Suppose this workload ran in a shared cluster with one other workload.
+    That workload claims the remaining resources (0 GPU, 9000 CPU, 7000 memory) which averages \textbf{5333} basis points.
+    Together, they sum to \textbf{10000} or 100\%.
+    This will allow us to annotate every edge with a single weight.
 
     \begin{figure}[H]
       \centering
@@ -262,36 +267,143 @@
       \label{figure:3}
     \end{figure}
 
+  \subsection*{Apportioning Cost}
+    As said earlier, apportioning usage is not enough.
+    There needs to be able to be a monetary value.
+    Now, this monetary value could be a real value, like a bill.
+    Or, it could be a synthetic value that someone made up.
+
+    It works by attaching a cost to a root workload in the graph.
+    From there, all subsequent charges can be derived using common, well known algorithms.
+
+    \subsubsection*{Path Enumeration}
+      In many cases, we want to know the cost of a single product.
+      Path enumeration is used to provide a list of all paths between a pair of vertices in a graph.
+      This same concept can be applied using a single starting vertex and a direction to search.
+      The following is a path enumeration for \textit{A} in Figure~\ref{figure:3}.
+
+      \begin{enumerate}
+        \item A, B, D
+        \item A, B, E
+        \item A, C, E
+        \item A, C, F, E
+      \end{enumerate}
+
+      Similarly, this can be applied in the opposite direction.
+      The following is an inverse path enumeration for \textit{E}.
+
+      \begin{enumerate}
+        \item E, B, A
+        \item E, C, A
+        \item E, F, C, A
+      \end{enumerate}
+
+      Path enumeration is key to attributing cost.
+
+    \subsubsection*{Computing Cost}
+      Using the enumerated paths, we can compute the total cost for a given workload.
+      Costs are computed using the weights on the edge of the graph in combination with root costs.
+      The equations are as follows.
+
+      \begin{gather*}
+        \forall^{workloads}_{w} \\
+        \\
+        cost(w) = \sum^{paths}_{p} cost(p) \\
+        \\
+        cost(p) = root(p) \times \prod^{p}_{edge} (weight / 10000) \\
+        \\
+        root(p) = p[len(p) - 1]_{cost} \\
+      \end{gather*}
+
+      To help explain, let's consider \textit{D}.
+      It has a single path, \textit{D, B, A}.
+      Figure~\ref{figure:4} highlights this path in blue.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-d.png}
+        \caption{Cost for D}
+        \label{figure:4}
+      \end{figure}
+
+      Using the corresponding information in the graph and our associated equations, we can compute a cost for \textit{D}.
+
+      \begin{gather*}
+        cost(p_{1}) = A_{cost} \times 0.4 \times 0.4 \\
+        \\
+        cost(D) = A_{cost} \times 0.16 \\
+      \end{gather*}
+
+      If \textit{A} costs \textbf{100 USD}, then \textit{D} costs \textbf{16 USD}.
+      Similarly, we can consider a more complicated example.
+      Consider \textit{E} which has three paths.
+      They are documented in the section on \textbf{Path Enumeration} and
+      are highlighted in Figures~\ref{figure:5},~\ref{figure:6},~\ref{figure:7}.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep1.png}
+        \caption{Path 1 for E}
+        \label{figure:5}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep2.png}
+        \caption{Path 2 for E}
+        \label{figure:6}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep3.png}
+        \caption{Path 3 for E}
+        \label{figure:7}
+      \end{figure}
+
+      While more complicated, the process is the same.
+
+      \begin{gather*}
+        cost(p_{1}) = A_{cost} \times 0.4 \times 0.5 \\
+        cost(p_{2}) = A_{cost} \times 0.6 \times 0.3 \\
+        cost(p_{3}) = A_{cost} \times 0.6 \times 0.4 \times 0.5 \\
+        \\
+        cost(E) = A_{cost} \times (0.2 + 0.18 + 0.12) \\
+        cost(E) = A_{cost} \times 0.5 \\
+      \end{gather*}
+
+      If \textit{A} costs \textbf{100 USD}, then \textit{E} costs \textbf{50 USD}.
+
   \subsection*{Reconciling Cost}
+    As we are dealing with a system that apportions cost, we should ensure that the apportioning is done correctly.
+    In accounting, reconciliation is used to ensure that the money leaving an account matches the actual money spent.
+    We can use the same process to balance our computed costs against the provided costs.
+    Table~\ref{table:1} demonstrates how the accounts are balanced using their attributed cost and billable claims.
 
-    \begin{gather*}
-        productCost(product) = \sum^{path}_{paths} pathCost(path) \\
-        pathCost(path) = rootCost(path) \times \prod^{edge}_{path} (usage / 100) \\
-        rootCost(path) = path[len(path) - 1].cost
-    \end{gather*}
-
-    \begin{figure}[H]
+    \begin{table}[H]
       \centering
-      \includegraphics[width=\linewidth]{./truth-and-reconciliation-reconcile-d.png}
-      \caption{Reconcile for product D}
-      \label{figure:4}
-    \end{figure}
+      \begin{tabular}{ l|c|r|c }
+        $w$ & Attributed       & Billable & Balance \\
+        \hline
+        A   & $ x            $ &    10000 & $ 0 $ \\
+        B   & $ x \times .4  $ &     9000 & $ x \times 0.04 $ \\
+        C   & $ x \times .6  $ &     7000 & $ x \times 0.18 $ \\
+        D   & $ x \times .16 $ &        0 & $ x \times 0.16 $ \\
+        E   & $ x \times .5  $ &        0 & $ x \times 0.50 $ \\
+        F   & $ x \times .24 $ &     5000 & $ x \times 0.12 $ \\
+        \hline
+            &                  &          & $ x \times 1.00 $ \\
+      \end{tabular}
+      \caption{Reconciliation}
+      \label{table:1}
+    \end{table}
 
-    \[ productCost(D) = cost(A) \times 0.4 \times 0.4 \]
+    This is done using the following equation.
 
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=\linewidth]{./truth-and-reconciliation-reconcile-e.png}
-      \caption{Reconcile for product E}
-      \label{figure:5}
-    \end{figure}
+    \[ balance(w) = attributed \times \left(1 - \frac{billable}{10000}\right) \]
 
-    \begin{gather*}
-        pathCost(1) = cost(A) \times 0.4 \times 0.5 \\
-        pathCost(2) = cost(A) \times 0.6 \times 0.3 \\
-        pathCost(3) = cost(A) \times 0.6 \times 0.4 \times 0.5 \\
-    \end{gather*}
-
+    What's left at the end is an approach that balances.
+    Since cost is distributed proportionately, we're able to ensure cost is properly attributed throughout the system.
 
   \subsection*{The Ledger}
 
@@ -306,18 +418,35 @@
         payer & Who received services (from) \\
         payee & Who provides services (to) \\
         type & A debit or credit \\
-        usage & Usage in basis points \\
+        usage & The usage \\
         urn & A uniform resource name \\
         tags & Organization specific metadata \\
-        detail & A break down of charges
+        detail & A break down of charges \\
       \end{tabular}
-      \caption{Fields on each document}
-      \label{table:1}
+      \caption{Fields}
+      \label{table:2}
     \end{table}
 
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{ l|l }
+        Field & Type \\
+        \hline
+        datetime & datetime, int64 \\
+        region & string \\
+        env & string \\
+        payer & string \\
+        payee & string \\
+        type & enum(debit, credit) \\
+        usage & int16 \\
+        urn & string \\
+        tags & map[string]string \\
+        detail & map[string]string \\
+      \end{tabular}
+      \caption{Field types}
+      \label{table:3}
+    \end{table}
 
-  \subsection*{Over-commit}
-
-    TBD
+\section*{Closing Remarks}
 
 \end{document}
