@@ -3,7 +3,7 @@
 \usepackage{float}
 \usepackage{amsmath}
 
-\title{Reconciling organizational cost across business units}
+\title{Comprehensive Cost Attribution}
 \author{Mya Pitzeruse}
 
 \begin{document}
@@ -25,7 +25,7 @@
 
   \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{./truth-and-reconciliation-application.png}
+    \includegraphics[width=\linewidth]{./cost-attribution-application.png}
     \caption{A multiple platform application}
     \label{figure:1}
   \end{figure}
@@ -141,7 +141,7 @@
     This URN uses the \textit{ietf} namespace with the \textit{rfc} namespace-specific string.
     In order to ensure global uniqueness, namespaces must be registered with the Internet Assigned Numbers Authority (IANA.)
     Since most organizations will keep this information internally, the need to register the namespace is less of a requirement.
-    For simplicity, we will use the \textit{costrecon} namespace.
+    For simplicity, we will use the \textit{workload} namespace.
     This namespace has \textbf{not} been registered and only serves as demonstration.
 
     A URN in this document refers to specific workloads.
@@ -152,16 +152,16 @@
     The block below enumerates several examples of further namespacing by class and kind.
 
 \begin{verbatim}
-  urn:costrecon:aws:642135246531
-  urn:costrecon:compute:host:appname
-  urn:costrecon:compute:vm:appname
-  urn:costrecon:compute:pod:appname
-  urn:costrecon:compute:container:appname
-  urn:costrecon:storage:postgres:appdb
-  urn:costrecon:storage:mysql:appdb
-  urn:costrecon:storage:rds:appdb
-  urn:costrecon:storage:aurora:appdb
-  urn:costrecon:storage:spanner:appdb
+  urn:workload:aws:642135246531
+  urn:workload:compute:host:appname
+  urn:workload:compute:vm:appname
+  urn:workload:compute:pod:appname
+  urn:workload:compute:container:appname
+  urn:workload:storage:postgres:appdb
+  urn:workload:storage:mysql:appdb
+  urn:workload:storage:rds:appdb
+  urn:workload:storage:aurora:appdb
+  urn:workload:storage:spanner:appdb
 \end{verbatim}
 
     \subsubsection*{Amazon's ARN}
@@ -189,7 +189,7 @@
 
     \begin{figure}[H]
       \centering
-      \includegraphics[width=\linewidth]{./truth-and-reconciliation-graph.png}
+      \includegraphics[width=\linewidth]{./cost-attribution-graph.png}
       \caption{Exchange of service graph}
       \label{figure:2}
     \end{figure}
@@ -262,7 +262,7 @@
 
     \begin{figure}[H]
       \centering
-      \includegraphics[width=\linewidth]{./truth-and-reconciliation-graph-weighted.png}
+      \includegraphics[width=\linewidth]{./cost-attribution-graph-weighted.png}
       \caption{Weighted exchange of service graph}
       \label{figure:3}
     \end{figure}
@@ -321,7 +321,7 @@
 
       \begin{figure}[H]
         \centering
-        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-d.png}
+        \includegraphics[width=\linewidth]{./cost-attribution-cost-d.png}
         \caption{p1 for D}
         \label{figure:4}
       \end{figure}
@@ -342,21 +342,21 @@
 
       \begin{figure}[H]
         \centering
-        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep1.png}
+        \includegraphics[width=\linewidth]{./cost-attribution-cost-ep1.png}
         \caption{p1 for E}
         \label{figure:5}
       \end{figure}
 
       \begin{figure}[H]
         \centering
-        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep2.png}
+        \includegraphics[width=\linewidth]{./cost-attribution-cost-ep2.png}
         \caption{p2 for E}
         \label{figure:6}
       \end{figure}
 
       \begin{figure}[H]
         \centering
-        \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep3.png}
+        \includegraphics[width=\linewidth]{./cost-attribution-cost-ep3.png}
         \caption{p3 for E}
         \label{figure:7}
       \end{figure}
@@ -406,7 +406,12 @@
     They should sum to the total cost fed into the system (as shown in Table~\ref{table:1}.)
     Since cost is distributed proportionately, we're able to ensure attribution throughout the system.
 
+    This shows that the approach to cost attribution described herein balances.
+
   \subsection*{The Ledger}
+    Ledgers are used to track transactions between two parties.
+    Consider Table~\ref{table:2} and Table~\ref{table:3}.
+    They detail the fields and data types of the ledger
 
     \begin{table}[H]
       \centering
@@ -414,15 +419,13 @@
         Field & Explanation \\
         \hline
         datetime & Time of transaction \\
-        region & A geographic identifier \\
-        env & An environmental identifier \\
         payer & Who received services (from) \\
         payee & Who provides services (to) \\
         type & A debit or credit \\
         usage & The usage \\
         urn & A uniform resource name \\
-        tags & Organization specific metadata \\
         detail & A break down of charges \\
+        labels & Organization specific metadata \\
       \end{tabular}
       \caption{Fields}
       \label{table:2}
@@ -434,15 +437,13 @@
         Field & Type \\
         \hline
         datetime & datetime, int64 \\
-        region & string \\
-        env & string \\
         payer & string \\
         payee & string \\
         type & enum(debit, credit) \\
-        usage & int16 \\
+        usage & int32 \\
         urn & string \\
-        tags & map[string]string \\
-        detail & map[string]string \\
+        detail & map[string]int32 \\
+        labels & map[string]string \\
       \end{tabular}
       \caption{Field types}
       \label{table:3}
