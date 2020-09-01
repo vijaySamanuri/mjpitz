@@ -322,11 +322,11 @@
       \begin{figure}[H]
         \centering
         \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-d.png}
-        \caption{Cost for D}
+        \caption{p1 for D}
         \label{figure:4}
       \end{figure}
 
-      Using the corresponding information in the graph and our associated equations, we can compute a cost for \textit{D}.
+      Using the information in the graph and our equations, we can compute a cost for \textit{D}.
 
       \begin{gather*}
         cost(p_{1}) = A_{cost} \times 0.4 \times 0.4 \\
@@ -336,28 +336,28 @@
 
       If \textit{A} costs \textbf{100 USD}, then \textit{D} costs \textbf{16 USD}.
       Similarly, we can consider a more complicated example.
-      Consider \textit{E} which has three paths.
-      They are documented in the section on \textbf{Path Enumeration} and
-      are highlighted in Figures~\ref{figure:5},~\ref{figure:6},~\ref{figure:7}.
+      \textit{E} has three paths.
+      They are documented in the section on Path Enumeration and
+      highlighted in Figures~\ref{figure:5},~\ref{figure:6},~and~\ref{figure:7}.
 
       \begin{figure}[H]
         \centering
         \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep1.png}
-        \caption{Path 1 for E}
+        \caption{p1 for E}
         \label{figure:5}
       \end{figure}
 
       \begin{figure}[H]
         \centering
         \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep2.png}
-        \caption{Path 2 for E}
+        \caption{p2 for E}
         \label{figure:6}
       \end{figure}
 
       \begin{figure}[H]
         \centering
         \includegraphics[width=\linewidth]{./truth-and-reconciliation-cost-ep3.png}
-        \caption{Path 3 for E}
+        \caption{p3 for E}
         \label{figure:7}
       \end{figure}
 
@@ -402,8 +402,9 @@
 
     \[ balance(w) = attributed \times \left(1 - \frac{billable}{10000}\right) \]
 
-    What's left at the end is an approach that balances.
-    Since cost is distributed proportionately, we're able to ensure cost is properly attributed throughout the system.
+    At the end, you have a balance for each project.
+    They should sum to the total cost fed into the system (as shown in Table~\ref{table:1}.)
+    Since cost is distributed proportionately, we're able to ensure attribution throughout the system.
 
   \subsection*{The Ledger}
 
