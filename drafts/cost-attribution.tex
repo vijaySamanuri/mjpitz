@@ -411,7 +411,8 @@
   \subsection*{The Ledger}
     Ledgers are used to track transactions between two parties.
     Consider Table~\ref{table:2} and Table~\ref{table:3}.
-    They detail the fields and data types of the ledger
+    They detail the fields and data types of the ledger.
+    Each entry in the ledger represents a workload specified by a URN.
 
     \begin{table}[H]
       \centering
@@ -448,6 +449,10 @@
       \caption{Field types}
       \label{table:3}
     \end{table}
+
+    Usage can store basis points or a monetary value.
+    Basis points make it easy to record allocations over time.
+    The reconciliation process can then operate over the basis point ledger to compute a monetary ledger.
 
 \section*{Closing Remarks}
 
