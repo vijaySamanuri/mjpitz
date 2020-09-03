@@ -95,19 +95,18 @@
   Understanding them will help map them to potential internal concepts.
 
   \subsection*{Workloads}
-    Products are composed of one or more workloads.
+    One or more workloads compose a product
     Workloads represent a variety of processes an organization might run.
     They can be a long running, public facing web services or background jobs.
-    Workloads can run across a variety of platforms but are often deployed to just one.
+    Workloads can run across a variety of platforms but are often deployed to one.
 
   \subsection*{Resources}
-    Workloads require resources to run.
-    Common cases need things like CPU, memory, and occasionally disk.
-    At the same time, it's important that resources are made available through a variety of platforms.
-    Kubernetes allows containers to reserve resources and it finds room within the cluster to run.
-    Similarly, virtual machines can be used to allocate resources, while also providing virtualized hardware.
+    Workloads need resources to run.
+    Common cases need things like CPU, memory, and disk.
+    At the same time, resources are available through a variety of platforms.
+    Kubernetes finds room within the cluster to run containers based on their requests.
+    Virtual machines provide a similar allocation of resources, while also providing virtualized hardware.
     Regardless of where and how the workloads run, resources are uniform.
-    They are measured using standardized units and typically come at some cost.
 
   \subsection*{Standard Units of Measure}
     With anything we measure, standardization and documentation of units is important.
@@ -127,18 +126,9 @@
     Finer grained units can be used if needed.
 
   \subsection*{Uniform Resource Names}
-    A uniform resource name (URN) is like a uniform resource identifier (URI).
-    They were developed early on in the days of the internet.
-    URNs should be:
-
-    \begin{itemize}
-      \item Globally unique
-      \item Persistent
-      \item Location-independent
-      \item Namespaced
-    \end{itemize}
-
-    To help understand this concept a bit more, let's consider an example using RFCs.
+    A uniform resource name (URN) is a globally unique, persistent, location-independent identifier.
+    While deprecated in 2005, they continue to see use today.
+    To help understand URNs a bit more, let's consider an example using RFCs.
     The following URN is for RFC-2141, the specification for URNs.
 
 \begin{verbatim}
@@ -146,17 +136,16 @@
 \end{verbatim}
 
     This URN uses the \textit{ietf} namespace with the \textit{rfc} namespace-specific string.
-    In order to ensure global uniqueness, namespaces must be registered with the Internet Assigned Numbers Authority (IANA.)
-    Since most organizations will keep this information internally, the need to register the namespace is less of a requirement.
+    To ensure uniqueness, you must register namespaces with the Internet Assigned Numbers Authority (IANA).
     For simplicity, we will use the \textit{workload} namespace.
     This namespace has \textbf{not} been registered and only serves as demonstration.
 
     A URN in this document refers to specific workloads.
     Let us consider a database deployment MySQL name appdb.
-    At some point, I might want to migrate appdb from MySQL to PostgreSQL.
+    At some point, I migrate appdb from MySQL to PostgreSQL.
     During this time, both a MySQL and PostgreSQL resource will exist with the name appdb.
-    As a result, you should scope your identifiers appropriately.
-    The block below enumerates several examples of further namespacing by class and kind.
+    As a result, you should scope your identifiers.
+    The block below enumerates several examples of further scoping by class and kind.
 
 \begin{verbatim}
   urn:workload:aws:642135246531
@@ -173,25 +162,25 @@
 
     \subsubsection*{Amazon's ARN}
       Amazon leverages it's own resource naming scheme called ARNs.
-      Similar to URNs, ARNs represent a unique resource in AWS.
+      Like URNs, ARNs represent a unique resource in AWS.
       The solution described herein should support ARNs in place of URNs.
-      It's recommended that URNs are consistent in implementations for simplicity and ease of use.
+      It's recommended that URNs are consistent for simplicity and ease of use.
 
   \subsection*{Double-entry Bookkeeping}
-    Double-entry bookkeeping is a common practice used by most (if not all) financially regulated systems.
-    It is used to keep accounts balanced and as an error detection tool.
+    Double-entry bookkeeping is a common practice used by most (if not all) regulated financial systems.
+    It is often used to keep accounts balanced and as an error detection tool.
     Implementation of such a system requires several key details:
 
     \begin{itemize}
       \item Each entry added is immutable.
       \item Every entry added to one account, requires a corresponding entry in the other account.
-      \item Both charges (debits) and payments (credits) are tracked independently.
+      \item Independent tracking of charges (debits) and payments (credits).
     \end{itemize}
 
     Double-entry systems are often implemented as a ledger.
     This allows the system to track transactions for a given account.
     In this solution, we augment the traditional approach to double-entry bookkeeping with hierarchy.
-    This is done to model the real-world exchange of resources between groups.
+    We do this to model the real-world exchange of resources between groups.
     Consider Figure~\ref{figure:2}.
 
     \begin{figure}[H]
@@ -203,26 +192,28 @@
 
     This graph shows how projects can build upon one another to deliver value to the business.
     For example, E uses services provided by B, C, and F.
-    At the end of the day, we want to ensure E is attributed the resources that they consume.
+    At the end of the day, we want to attribute E the resources that they consume.
 
 \section*{Implementation}
-  When it comes to implementation, I've found there are two schools fo thought.
+  When it comes to implementation, I've found there are two schools of thought.
 
   The first approach is to use real world dollars.
-  This encounters many challenges such as choosing a base currency or determining the cost of non-cloud environments.
-  In many ways, this information is extremely valuable for product owners.
-  They understand what their system costs and how much they should expect to charge for their service.
+  There can be some challenge in this approach.
+  If you work for an international organization, you'll need to choose a base currency.
+  Then, you'll need to consider things like exchange rates.
+  In many ways, this information is valuable for product owners.
+  It communicates how much their system costs and helps them determine a price for their service.
   In the wrong hands, this information is dangerous.
 
   The second approach is to use a basis point type of system.
   This approach allows you to represent the underlying usage as a percentage.
   One problem with this approach is that when you scale a cluster up, usage goes down.
-  This is because the increase in available resources changes what percentage of the cluster you use.
-  This can be really confusing if you haven't deployed changes recently.
+  This can be confusing if you haven't deployed changes recently, but see a shift in your usage.
 
   At the end of the day, we need a combination of approaches.
-  Basis points should be used to apportion out usage at each tier.
-  When displaying or analyzing information, a currency value should be used.
+  We can use basis points to apportion out usage at each tier.
+  When displaying or analyzing information, we can provide a currency value.
+  The currency value could be synthetic, an estimate, or a real world value.
   This approach allows for the most accurate representation of a given products cost.
 
   \subsection*{Apportioning Usage}
@@ -410,7 +401,7 @@
     \[ balance(w) = attributed \times \left(1 - \frac{billable}{10000}\right) \]
 
     At the end, you have a balance for each project.
-    They should sum to the total cost fed into the system (as shown in Table~\ref{table:1}.)
+    They should sum to the total cost fed into the system (as shown in Table~\ref{table:1}).
     Since cost is distributed proportionately, we're able to ensure attribution throughout the system.
 
     This shows that the approach to cost attribution described herein balances.
