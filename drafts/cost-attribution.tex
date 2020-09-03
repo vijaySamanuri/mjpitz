@@ -10,18 +10,21 @@
 \maketitle
 
 \begin{abstract}
-  This paper describes a solution to reconcile cost for shared infrastructure across business units.
-  It was designed to be comprehensive and flexible.
+  This paper details a solution to attributing cost across common infrastructure.
   The original target for the solution was a hybrid-cloud infrastructure.
-  As a result, it's concepts are generic and support both cloud and non-cloud ecosystems.
-  The goal of the solution is to attribute costs appropriately across a spectrum of platforms.
+  This led to a comprehensive, yet flexible design.
+  As a result, its concepts are generic and support both cloud and non-cloud ecosystems.
+  The primary goal is to provide a single pane of glass for the distribution of spend across platforms.
 \end{abstract}
 
 
 \section*{Introduction}
   Products run across a variety of platforms.
   Many use a combination of platforms to perform work efficiently.
-  Figure~\ref{figure:1} demonstrates how you might use platforms like Apache Hadoop, Kubernetes, and other managed services to build a product.
+  Managed database services allow teams to focus on their application logic.
+  Apache Hadoop is popular amongst the data science community for analyzing data.
+  Meanwhile, platforms like Kubernetes have gained popularity amongst engineers for orchestrating systems.
+  Each of these platforms play a role in the development of a single product.
 
   \begin{figure}[H]
     \centering
@@ -30,23 +33,26 @@
     \label{figure:1}
   \end{figure}
 
-  When an organization is small, they're often less concerned about attributing spend to their products.
-  As an organization grows, they often add new products to complement their existing offerings.
+  Smaller organizations are often less concerned about attributing spend to each product.
+  In most cases, these organizations need to know if they're profitable.
+  As an organization grows, they often add new products.
   With each new product, this figure grows more complex.
-  As this figure grows more complex, the need to attributing spend increases as well.
-  Executives often want to know how much each of their products cost to run and what their return on investment is.
-  When asked for this information, engineering leaders need to take time to track down all this information.
+  As a result, the need to attribute spend increases as well.
+  Executives often want to know how much each of their products cost.
+  This helps determine what their return on investment is.
+  When asked, leaders often need to take time to track down this information.
 
-  Solutions like \textit{CloudTamer} help organizations better manage their spend on cloud providers, but lack visibility into clustered environments.
-  In cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods, but miss managed services.
-  In the end, you wind up back to where you started.
-  Needing to query multiple sources for information.
+  Solutions like \textit{CloudTamer} help organizations better manage their spend on cloud providers.
+  But these solutions often lack visibility into clustered environments.
+  You can pair this with in cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods.
+  But in the end, you wind up back to where you started.
+  Needing to query several sources for information.
 
   While these account for common cases, it fails to consider less common ones.
   Suppose one part of your organization runs a service on behalf of the rest.
   You might want to apportion usage of that service out to it's heaviest consumers.
-  Throughout the course of my research, I found that no (if not few) comprehensive solutions exist.
-  In designing a comprehensive solution, I wanted to ensure compatibility with many existing solutions.
+  Through the course of my research, I found that no (if not few) comprehensive solutions exist.
+  In designing a comprehensive solution, I wanted to ensure compatibility with existing solutions.
 
 
 \section*{Background}
