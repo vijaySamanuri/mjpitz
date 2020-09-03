@@ -57,20 +57,20 @@
 
 \section*{Background}
   In November 2018, I re-joined Indeed to help with their ongoing Kubernetes effort.
-  At the time, we were feeling some pain-points scaling our Apache Mesos based infrastructure.
+  At the time, we were feeling some pain-points scaling our Apache Mesos infrastructure.
   Some efforts towards a Kubernetes based ecosystem had been underway.
 
-  The first effort was geared toward a short-term migration.
-  It would allow us to move off Apache Mesos while preserving the overall structure of our ecosystem.
-  The second was tasked with figuring out how to run upstream Kubernetes safely and securely.
+  The first effort focused on a short-term migration.
+  It would allow us to move off Apache Mesos while preserving the structure of our ecosystem.
+  The second focused on how to run upstream Kubernetes safely and securely.
   As we migrated to Kubernetes, teams built out some cost attribution.
-  The hope was to report on changes in products between platforms as well as provide transparency to resource use.
+  We wanted to report on changes as teams underwent these migrations.
 
-  Similar questions were raised as we began our journey to the the cloud.
+  We raised similar questions as we began our journey to the the cloud.
   During this time, I considered several solutions.
-  Many of them were geared toward solving in cluster or out of cluster costs, not both.
-  In working with the CNCF end user group, I learned many organizations share similar positions.
-  Either they were looking for a more comprehensive solution or were using multiple to fill in the gaps.
+  Many of them focused on solving in cluster or out of cluster costs, not both.
+  When working with several organizations out there, I learned many face similar problems.
+  Either they wanted a more comprehensive solution or used several to fill in the gaps.
   At the time, my focus at work was pretty deep into this space.
 
   In discovering a lack of comprehensive solutions, I researched as much as I could.
@@ -79,15 +79,16 @@
   In doing soIn doing so, I was able to identify commonalities across each of them.
 
   \begin{itemize}
-    \item Products are composed of one or more workloads
-    \item Workloads have an identifier (often unique to the platform) and require resources to run
+    \item One or more workloads compose a product
+    \item Workloads have a unique platform identifier and need resources to run
     \item Resources between each data set varied with some commonality (CPU, memory, disk)
-    \item Each data set represented an exchange of services between one group and their customers
+    \item Each represented an exchange of services between one group and their customers
   \end{itemize}
 
   These discoveries lead to the design a development of a common reporting platform.
-  The platform is designed with decomposition in mind.
-  It allows additional layers to be added progressively, allowing organizations to add granularity over time.
+  Designed with decomposition in mind, the platform allows for the addition of layers.
+  This allows organizations to start out broad and get more granular over time.
+
 
 \section*{Concepts}
   This section contains concepts that are fundamental to the solution.
