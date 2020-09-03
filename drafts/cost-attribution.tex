@@ -217,16 +217,21 @@
   This approach allows for the most accurate representation of a given products cost.
 
   \subsection*{Apportioning Usage}
-    Apportioning usage of a platform is the process of dividing a single pool of resources amongst consumers.
-    This is done using basis points in order to address issues with things like over-commit.
-    When using a non-basis point model, over-commit often results in an over-charge of resources.
-    This means that a given product could become cashflow-positive.
-    While this may be the goal of any user facing product, it's often not the goal of apportioning.
+    Apportioning usage is the process of dividing a pool of resources amongst its consumers.
+    In this solution, we do this using basis points.
+    Basis points represent fractional percentages.
+    They are often represented as one hundredth of a percent.
+    We use basis points as it helps address a couple of challenges.
 
-    In order to establish the proper basis points, we must first know what the total available resources are.
-    This is done by taking the maximum of what is available (common case) and what is reserved (over-commit).
-    This will need to be done across all resources you want to apportion out.
-    The equations below can be used to compute the total availability of a given resource.
+    \begin{enumerate}
+      \item Normalize measurements to a common unit
+      \item Better handle cases of over-commit resources
+    \end{enumerate}
+
+    To determine basis points for a process, we need to know what the total available resources are.
+    The total (\textit{T}) will be the larger of what is \textit{available} (common case) and what is \textit{reserved} (over-commit).
+    We apply the process to each resource we want to apportion out.
+    The equations below compute the total availability of a given resource.
 
     \begin{gather*}
       T_{reserved} = \sum^{workloads}_{W} max(W_{reserved}, W_{usage}) \\
@@ -234,8 +239,8 @@
       T = max(T_{available}, T_{reserved}) \\
     \end{gather*}
 
-    Once you've computed the total amount of a given resource, you should be able to start distributing basis points.
-    The equation below demonstrates how to calculate basis points for a single resource for a single workload.
+    Once you've computed the total amount of a resource, you can distribute basis points.
+    The equation below calculate basis points for a single resource for a single workload.
 
     \begin{gather*}
       basispoints = \frac{max(reserved, usage)}{T} * 100 \\
@@ -243,7 +248,15 @@
 
     At the end, we have a set of basis points for each resource we want to charge for.
     We need to convert this set of basis points to a single basis point.
-    Since we know the sample size for each resource group is the same, we can safely use an average.
+    A simple, and yet powerful,
+    Taking an average of percentages is often a bad idea.
+    In this case, we can take steps to ensure taking an average of percentages is safe and representative of the underlying usage.
+
+    We should keep in mind that these basis points are being distributed at each node in our graph.
+    This ensures that we know the full scope of data at the time we calculate percentages.
+    This also ensures that the sample size of the data is the same for each resource we calculate.
+    This means that we compute basis points either from a constant or a computed value from the same record set.
+    Because of this, we can safely leverage an average of basis points.
     Let us consider the following allocations.
 
     \begin{itemize}
@@ -272,12 +285,12 @@
     Or, it could be a synthetic value that someone made up.
 
     It works by attaching a cost to a root workload in the graph.
-    From there, all subsequent charges can be derived using common, well known algorithms.
+    From there, we can derive all subsequent charges using common, well known algorithms.
 
     \subsubsection*{Path Enumeration}
-      In many cases, we want to know the cost of a single product.
-      Path enumeration is used to provide a list of all paths between a pair of vertices in a graph.
-      This same concept can be applied using a single starting vertex and a direction to search.
+      In most cases, we want to know the cost of a single product.
+      Path enumeration provides a list of all paths between a pair of vertices in a graph.
+      We can apply this same concept using a single starting vertex and a direction to search.
       The following is a path enumeration for \textit{A} in Figure~\ref{figure:3}.
 
       \begin{enumerate}
@@ -287,7 +300,7 @@
         \item A, C, F, E
       \end{enumerate}
 
-      Similarly, this can be applied in the opposite direction.
+      Similarly, we can apply this in the opposite direction.
       The following is an inverse path enumeration for \textit{E}.
 
       \begin{enumerate}
@@ -296,11 +309,11 @@
         \item E, F, C, A
       \end{enumerate}
 
-      Path enumeration is key to attributing cost.
+      This process is key to attributing cost.
 
     \subsubsection*{Computing Cost}
       Using the enumerated paths, we can compute the total cost for a given workload.
-      Costs are computed using the weights on the edge of the graph in combination with root costs.
+      We compute costs using the weights on the edge of the graph in combination with root costs.
       The equations are as follows.
 
       \begin{gather*}
@@ -373,10 +386,10 @@
       If \textit{A} costs \textbf{100 USD}, then \textit{E} costs \textbf{50 USD}.
 
   \subsection*{Reconciling Cost}
-    As we are dealing with a system that apportions cost, we should ensure that the apportioning is done correctly.
-    In accounting, reconciliation is used to ensure that the money leaving an account matches the actual money spent.
+    As we are dealing with a financial system, we should ensure we apportion cost correctly.
+    In accounting, we use reconciliation to ensure that money leaving an account matches the actual money spent.
     We can use the same process to balance our computed costs against the provided costs.
-    Table~\ref{table:1} demonstrates how the accounts are balanced using their attributed cost and billable claims.
+    Table~\ref{table:1} demonstrates how we balance and reconcile accounts.
 
     \begin{table}[H]
       \centering
@@ -396,18 +409,19 @@
       \label{table:1}
     \end{table}
 
-    This is done using the following equation.
+    We compute this using the current spend and the current billable amount.
+    Using this information, we can compute the balance using the following equation.
 
     \[ balance(w) = attributed \times \left(1 - \frac{billable}{10000}\right) \]
 
     At the end, you have a balance for each project.
     They should sum to the total cost fed into the system (as shown in Table~\ref{table:1}).
-    Since cost is distributed proportionately, we're able to ensure attribution throughout the system.
+    Since we proportionately distribute cost, we ensure proper attribution throughout the system.
 
     This shows that the approach to cost attribution described herein balances.
 
   \subsection*{The Ledger}
-    Ledgers are used to track transactions between two parties.
+    Accountants leverage ledgers to track transactions between two parties.
     Consider Table~\ref{table:2} and Table~\ref{table:3}.
     They detail the fields and data types of the ledger.
     Each entry in the ledger represents a workload specified by a URN.
@@ -449,27 +463,29 @@
     \end{table}
 
     Usage can store basis points or a monetary value.
-    Basis points make it easy to record allocations over time.
-    The reconciliation process can then operate over the basis point ledger to compute a monetary ledger.
+    Storing data as basis points make it quick and easy to record allocations over time.
+    We can later compute a monetary ledger using the basis point one and a set of bills.
 
 \section*{Parting Thoughts}
 
   \subsection*{Data Storage}
     The ledger can take many shapes and forms.
-    I recommend using a consistent system otherwise you can find yourself in a difficult position.
-    Labels on the ledge should be indexed.
-    This allows edge data to be categorized and grouped into additional hierarchies, such as your organization structure.
+    Storage should use a consistent system.
+    Eventually consistent systems can leave you in troublesome positions when reconciling cost.
+    Indexing labels on the ledger allows for the categorization of edge data.
+    The enabled further analysis and grouping into hierarchies, such as your organization structure.
 
-  \subsection*{Multiple Roots}
-    Throughout this document, we've largely demonstrated the process using a single product with a cost.
-    In practice, it's often more complex than that.
+\subsection*{Multiple Roots}
+    Throughout this document, we've demonstrated the process using a single product with a cost.
+    In practice, this graph is often more complex than that.
     Regardless, the process is still the same.
 
   \subsection*{Equitable Distribution}
     In some cases, products may not distribute all their resources amongst their consumers.
     This often leaves them with an overhead that they are responsible for.
-    In this case, some groups may choose to re-distribute their overhead amongst their consumers.
+    In this case, groups may choose to re-distribute their overhead amongst their consumers.
     This process is often referred to as equitable distribution.
+    The following equation computes a redistribution value to distribute amongst your customers.
 
     \[ redistribution = \frac{10000 - billable}{consumers} \]
 
