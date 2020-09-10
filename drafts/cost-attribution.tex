@@ -56,8 +56,7 @@
 
 
 \section*{Background}
-  In November 2018, I re-joined Indeed to help with their ongoing Kubernetes effort.
-  At the time, we were feeling some pain-points scaling our Apache Mesos infrastructure.
+  In November 2018, Indeed was feeling some pain-points scaling our Apache Mesos infrastructure.
   Some efforts towards a Kubernetes based ecosystem had been underway.
 
   The first effort focused on a short-term migration.
@@ -67,21 +66,21 @@
   We wanted to report on changes as teams underwent these migrations.
 
   We raised similar questions as we began our journey to the the cloud.
-  During this time, I considered several solutions.
+  During this time, we considered several solutions.
   Many of them focused on solving in cluster or out of cluster costs, not both.
   When working with several organizations out there, I learned many face similar problems.
   Either they wanted a more comprehensive solution or used several to fill in the gaps.
   At the time, my focus at work was pretty deep into this space.
 
-  In discovering a lack of comprehensive solutions, I researched as much as I could.
+  In discovering a lack of a comprehensive solutions, I started in on some research.
   I looked to open source to see what solutions did well and what they were missing.
-  I looked at the data we were already reporting and how I could build off that.
-  In doing soIn doing so, I was able to identify commonalities across each of them.
+  I looked at the data that was already reported and how that information could be used.
+  In doing so, I identified several commonalities across each of them.
 
   \begin{itemize}
     \item One or more workloads compose a product
     \item Workloads have a unique platform identifier and need resources to run
-    \item Resources between each data set varied with some commonality (CPU, memory, disk)
+    \item Resources between each data set varied with some commonality
     \item Each represented an exchange of services between one group and their customers
   \end{itemize}
 
@@ -121,6 +120,7 @@
       \item \textbf{Transport} is measured in \textbf{bytes}
       \item \textbf{Time} is measured in \textbf{milliseconds}
       \item An \textbf{API} is measured in \textbf{requests per second}
+      \item \textbf{Energy usage} is measured in \textbf{kilowatt-hours}
     \end{itemize}
 
     Finer grained units can be used if needed.
@@ -142,7 +142,7 @@
 
     A URN in this document refers to specific workloads.
     Let us consider a database deployment MySQL name appdb.
-    At some point, I migrate appdb from MySQL to PostgreSQL.
+    At some point, you migrate appdb from MySQL to PostgreSQL.
     During this time, both a MySQL and PostgreSQL resource will exist with the name appdb.
     As a result, you should scope your identifiers.
     The block below enumerates several examples of further scoping by class and kind.
@@ -278,6 +278,10 @@
       \label{figure:3}
     \end{figure}
 
+    In a properly weighted graph, the sum of all weights for a node should be less than or equal to \textbf{10000}.
+
+    \[ 10000 \leq \sum_{edge}^{node} edge_{weight} \]
+
   \subsection*{Apportioning Cost}
     As said earlier, apportioning usage is not enough.
     There needs to be able to be a monetary value.
@@ -394,29 +398,47 @@
     \begin{table}[H]
       \centering
       \begin{tabular}{ l|c|r|c }
-        $w$ & Attributed       & Billable & Balance \\
+        $w$ & Spend            & Attributed & Balance           \\
         \hline
-        A   & $ x            $ &    10000 & $ 0 $ \\
-        B   & $ x \times .4  $ &     9000 & $ x \times 0.04 $ \\
-        C   & $ x \times .6  $ &     7000 & $ x \times 0.18 $ \\
-        D   & $ x \times .16 $ &        0 & $ x \times 0.16 $ \\
-        E   & $ x \times .5  $ &        0 & $ x \times 0.50 $ \\
-        F   & $ x \times .24 $ &     5000 & $ x \times 0.12 $ \\
+        A   & $ x            $ &      10000 & $ 0             $ \\
+        B   & $ x \times .4  $ &       9000 & $ x \times 0.04 $ \\
+        C   & $ x \times .6  $ &       7000 & $ x \times 0.18 $ \\
+        D   & $ x \times .16 $ &          0 & $ x \times 0.16 $ \\
+        E   & $ x \times .5  $ &          0 & $ x \times 0.50 $ \\
+        F   & $ x \times .24 $ &       5000 & $ x \times 0.12 $ \\
         \hline
-            &                  &          & $ x \times 1.00 $ \\
+            &                  &            & $ x \times 1.00 $ \\
       \end{tabular}
       \caption{Reconciliation}
       \label{table:1}
     \end{table}
 
-    We compute this using the current spend and the current billable amount.
-    Using this information, we can compute the balance using the following equation.
+    We compute this using the current spend and the current attributed amount.
+    The attributed amount shouldn't factor in anything attributed back to your own team.
+    Using the following equation, we compute the remaining balance for each item.
 
-    \[ balance(w) = attributed \times \left(1 - \frac{billable}{10000}\right) \]
+    \[ balance(w) = spend \times \left(1 - \frac{attributed}{10000}\right) \]
 
-    At the end, you have a balance for each project.
-    They should sum to the total cost fed into the system (as shown in Table~\ref{table:1}).
-    Since we proportionately distribute cost, we ensure proper attribution throughout the system.
+    To help solidify this, let us consider the  example from earlier.
+    If \textit{A} cost \textbf{100 USD}, the balance for each would be as follows.
+
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{ l|c|r }
+        $w$ & Balance & USD \\
+        \hline
+        A   & $ 0             $ & $\$0$   \\
+        B   & $ x \times 0.04 $ & $\$4$   \\
+        C   & $ x \times 0.18 $ & $\$18$  \\
+        D   & $ x \times 0.16 $ & $\$16$  \\
+        E   & $ x \times 0.50 $ & $\$50$  \\
+        F   & $ x \times 0.12 $ & $\$12$  \\
+        \hline
+            & $ x \times 1.00 $ & $\$100$ \\
+      \end{tabular}
+      \caption{Balance Sheet}
+      \label{table:2}
+    \end{table}
 
     This shows that the approach to cost attribution described herein balances.
 
@@ -441,7 +463,7 @@
         labels & Organization specific metadata \\
       \end{tabular}
       \caption{Fields}
-      \label{table:2}
+      \label{table:3}
     \end{table}
 
     \begin{table}[H]
@@ -459,7 +481,7 @@
         labels & map[string]string \\
       \end{tabular}
       \caption{Field types}
-      \label{table:3}
+      \label{table:4}
     \end{table}
 
     Usage can store basis points or a monetary value.
