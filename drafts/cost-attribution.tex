@@ -3,6 +3,9 @@
 \usepackage{float}
 \usepackage{amsmath}
 
+\usepackage[backend=biber]{biblatex}
+\addbibresource{cost-attribution.bib}
+
 \title{Cost Attribution for Multi-cloud / Multi-platform Applications}
 \author{Mya Pitzeruse}
 
@@ -42,9 +45,9 @@
   This helps determine what their return on investment is.
   When asked, leaders often need to take time to track down this information.
 
-  Solutions like \textit{CloudTamer} help organizations better manage their spend on cloud providers.
+  Solutions like \textit{cloudtamer.io} help organizations better manage their spend on cloud providers ~\cite{cloudtamer}.
   But these solutions often lack visibility into clustered environments.
-  You can pair this with in cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods.
+  You can pair this with in cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods ~\cite{kubecost}.
   But in the end, you wind up back to where you started.
   Needing to query several sources for information.
 
@@ -126,10 +129,10 @@
     Finer grained units can be used if needed.
 
   \subsection*{Uniform Resource Names}
-    A uniform resource name (URN) is a globally unique, persistent, location-independent identifier.
+    A uniform resource name (URN) is a globally unique, persistent, location-independent identifier ~\cite{rfc8141}.
     While deprecated in 2005, they continue to see use today.
     To help understand URNs a bit more, let's consider an example using RFCs.
-    The following URN is for RFC-2141, the specification for URNs.
+    The following URN is for RFC-2141 ~\cite{rfc2141}, the specification for URNs.
 
 \begin{verbatim}
   urn:ietf:rfc:2141
@@ -167,7 +170,7 @@
       It's recommended that URNs are consistent for simplicity and ease of use.
 
   \subsection*{Double-entry Bookkeeping}
-    Double-entry bookkeeping is a common practice used by most (if not all) regulated financial systems.
+    Double-entry bookkeeping is a common practice used by most (if not all) regulated financial systems ~\cite{doubleentry}.
     It is often used to keep accounts balanced and as an error detection tool.
     Implementation of such a system requires several key details:
 
@@ -249,7 +252,7 @@
     At the end, we have a set of basis points for each resource we want to charge for.
     We need to convert this set of basis points to a single basis point.
     A simple approach would be to take the average.
-    Taking an average of percentages is often a bad idea.
+    Taking an average of percentages requires some care ~\cite{indeed,robertoreif}.
     In this case, we can take steps to ensure taking an average of percentages is safe and representative of the underlying usage.
 
     We should keep in mind that these basis points are being distributed at each node in our graph.
@@ -293,7 +296,7 @@
 
     \subsubsection*{Path Enumeration}
       In most cases, we want to know the cost of a single product.
-      Path enumeration provides a list of all paths between a pair of vertices in a graph.
+      Path enumeration provides a list of all paths between a pair of vertices in a graph ~\cite{Grossi2016}.
       We can apply this same concept using a single starting vertex and a direction to search.
       The following is a path enumeration for \textit{A} in Figure~\ref{figure:3}.
 
@@ -517,7 +520,6 @@
 
     \[ redistribution = \frac{10000 - billable}{consumers} \]
 
-\section*{References}
-  TBD
+\printbibliography
 
 \end{document}
