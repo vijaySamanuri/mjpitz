@@ -17,7 +17,8 @@
   The original target for the solution was a hybrid-cloud infrastructure.
   This led to a comprehensive, yet flexible design.
   As a result, its concepts are generic and support both cloud and non-cloud ecosystems.
-  The primary goal is to provide a single pane of glass for the distribution of spend across platforms.
+  The goal is to provide a single view into spend across platforms.
+  It needs to to support a large variety of use cases, from leaders analyzing spend to teams understanding the cost of systems they consume.
 \end{abstract}
 
 
@@ -25,8 +26,8 @@
   Products run across a variety of platforms.
   Many use a combination of platforms to perform work efficiently.
   Managed database services allow teams to focus on their application logic.
-  Apache Hadoop is popular amongst the data science community for analyzing data.
-  Meanwhile, platforms like Kubernetes have gained popularity amongst engineers for orchestrating systems.
+  Apache Hadoop is popular amongst the data science community for analyzing data~\cite{hadoop}.
+  Meanwhile, platforms like Kubernetes have gained popularity amongst engineers for orchestrating systems~\cite{k8s}.
   Each of these platforms play a role in the development of a single product.
 
   \begin{figure}[H]
@@ -45,24 +46,22 @@
   This helps determine what their return on investment is.
   When asked, leaders often need to take time to track down this information.
 
-  Solutions like \textit{cloudtamer.io} help organizations better manage their spend on cloud providers ~\cite{cloudtamer}.
+  Solutions like \textit{cloudtamer.io} help organizations better manage their spend on cloud providers~\cite{cloudtamer}.
   But these solutions often lack visibility into clustered environments.
-  You can pair this with in cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods ~\cite{kubecost}.
+  You can pair this with in cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods~\cite{kubecost}.
   But in the end, you wind up back to where you started.
   Needing to query several sources for information.
 
   While these account for common cases, it fails to consider less common ones.
   Suppose one part of your organization runs a service on behalf of the rest.
-  You might want to apportion usage of that service out to it's heaviest consumers.
-  Through the course of my research, I found that no (if not few) comprehensive solutions exist.
-  In designing a comprehensive solution, I wanted to ensure compatibility with existing solutions.
+  You might apportion usage of that service out to it's heaviest consumers.
 
 
 \section*{Background}
-  In November 2018, Indeed was feeling some pain-points scaling our Apache Mesos infrastructure.
+  In November 2018, Indeed was feeling pain-points scaling our Apache Mesos infrastructure~\cite{mesos}.
   Some efforts towards a Kubernetes based ecosystem had been underway.
 
-  The first effort focused on a short-term migration.
+  The first focused on a short-term migration.
   It would allow us to move off Apache Mesos while preserving the structure of our ecosystem.
   The second focused on how to run upstream Kubernetes safely and securely.
   As we migrated to Kubernetes, teams built out some cost attribution.
@@ -71,14 +70,14 @@
   We raised similar questions as we began our journey to the the cloud.
   During this time, we considered several solutions.
   Many of them focused on solving in cluster or out of cluster costs, not both.
-  When working with several organizations out there, I learned many face similar problems.
-  Either they wanted a more comprehensive solution or used several to fill in the gaps.
-  At the time, my focus at work was pretty deep into this space.
+  To accomplish this, many organizations pair solutions together to fill in gaps.
+  However, many platforms lack this capability out of box.
 
-  In discovering a lack of a comprehensive solutions, I started in on some research.
-  I looked to open source to see what solutions did well and what they were missing.
-  I looked at the data that was already reported and how that information could be used.
-  In doing so, I identified several commonalities across each of them.
+  In discovering a lack of comprehensive solutions, we started in on some research.
+  Understanding how information is already being collected and reported was key.
+  This would allow the solution to hook into many existing sources of information.
+  It also needed to be able to allow for other types of solutions later on too.
+  The following were some observations about systems that we analyzed.
 
   \begin{itemize}
     \item One or more workloads compose a product
@@ -129,10 +128,10 @@
     Finer grained units can be used if needed.
 
   \subsection*{Uniform Resource Names}
-    A uniform resource name (URN) is a globally unique, persistent, location-independent identifier ~\cite{rfc8141}.
+    A uniform resource name (URN) is a globally unique, persistent, location-independent identifier~\cite{rfc8141}.
     While deprecated in 2005, they continue to see use today.
     To help understand URNs a bit more, let's consider an example using RFCs.
-    The following URN is for RFC-2141 ~\cite{rfc2141}, the specification for URNs.
+    The following URN is for RFC-2141~\cite{rfc2141}, the specification for URNs.
 
 \begin{verbatim}
   urn:ietf:rfc:2141
@@ -144,8 +143,8 @@
     This namespace has \textbf{not} been registered and only serves as demonstration.
 
     A URN in this document refers to specific workloads.
-    Let us consider a database deployment MySQL name appdb.
-    At some point, you migrate appdb from MySQL to PostgreSQL.
+    Let us consider a database deployment MySQL named appdb~\cite{mysql}.
+    At some point, you migrate appdb from MySQL to PostgreSQL~\cite{postgres}.
     During this time, both a MySQL and PostgreSQL resource will exist with the name appdb.
     As a result, you should scope your identifiers.
     The block below enumerates several examples of further scoping by class and kind.
@@ -160,17 +159,16 @@
   urn:workload:storage:mysql:appdb
   urn:workload:storage:rds:appdb
   urn:workload:storage:aurora:appdb
-  urn:workload:storage:spanner:appdb
 \end{verbatim}
 
     \subsubsection*{Amazon's ARN}
-      Amazon leverages it's own resource naming scheme called ARNs.
+      Amazon leverages it's own resource naming scheme called ARNs~\cite{awsarn}.
       Like URNs, ARNs represent a unique resource in AWS.
       The solution described herein should support ARNs in place of URNs.
       It's recommended that URNs are consistent for simplicity and ease of use.
 
   \subsection*{Double-entry Bookkeeping}
-    Double-entry bookkeeping is a common practice used by most (if not all) regulated financial systems ~\cite{doubleentry}.
+    Double-entry bookkeeping is a common practice used by most (if not all) regulated financial systems~\cite{doubleentry2}.
     It is often used to keep accounts balanced and as an error detection tool.
     Implementation of such a system requires several key details:
 
@@ -180,7 +178,7 @@
       \item Independent tracking of charges (debits) and payments (credits).
     \end{itemize}
 
-    Double-entry systems are often implemented as a ledger.
+    Double-entry systems are often implemented as a ledger~\cite{doubleentry}.
     This allows the system to track transactions for a given account.
     In this solution, we augment the traditional approach to double-entry bookkeeping with hierarchy.
     We do this to model the real-world exchange of resources between groups.
@@ -252,7 +250,7 @@
     At the end, we have a set of basis points for each resource we want to charge for.
     We need to convert this set of basis points to a single basis point.
     A simple approach would be to take the average.
-    Taking an average of percentages requires some care ~\cite{indeed,robertoreif}.
+    Taking an average of percentages requires some care~\cite{indeed,robertoreif}.
     In this case, we can take steps to ensure taking an average of percentages is safe and representative of the underlying usage.
 
     We should keep in mind that these basis points are being distributed at each node in our graph.
@@ -296,7 +294,7 @@
 
     \subsubsection*{Path Enumeration}
       In most cases, we want to know the cost of a single product.
-      Path enumeration provides a list of all paths between a pair of vertices in a graph ~\cite{Grossi2016}.
+      Path enumeration provides a list of all paths between a pair of vertices in a graph~\cite{Grossi2016}.
       We can apply this same concept using a single starting vertex and a direction to search.
       The following is a path enumeration for \textit{A} in Figure~\ref{figure:3}.
 
