@@ -437,11 +437,11 @@
         \hline
             & $ x \times 1.00 $ & $\$100$ \\
       \end{tabular}
-      \caption{Balance Sheet}
+      \caption{Balance sheet}
       \label{table:2}
     \end{table}
 
-    This shows that the approach to cost attribution described herein balances.
+    This shows that this approach to cost attribution balances.
 
   \subsection*{The Ledger}
     Accountants leverage ledgers to track transactions between two parties.
@@ -481,13 +481,32 @@
         detail & map[string]int32 \\
         labels & map[string]string \\
       \end{tabular}
-      \caption{Field types}
+      \caption{Data types}
       \label{table:4}
     \end{table}
 
-    Usage can store basis points or a monetary value.
+    Usage can store basis points or a monetary value as shown in Table~\ref{table:5}.
     Storing data as basis points make it quick and easy to record allocations over time.
     We can later compute a monetary ledger using the basis point one and a set of bills.
+
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{ l|l|r }
+        To & From & Usage \\
+        \hline
+        A & B & 4000 \\
+        A & C & 6000 \\
+        B & D & 4000 \\
+        B & E & 5000 \\
+        C & C & 1000 \\
+        C & E & 3000 \\
+        C & F & 4000 \\
+        F & E & 5000 \\
+      \end{tabular}
+      \caption{Example basis point ledger}
+      \label{table:5}
+    \end{table}
+
 
 \section*{Parting Thoughts}
 
