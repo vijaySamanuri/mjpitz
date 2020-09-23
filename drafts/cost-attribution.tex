@@ -490,6 +490,28 @@
     We can later compute a monetary ledger using the basis point one and a set of bills.
 
 \section*{Parting Thoughts}
+
+  \subsection*{Multiple Roots}
+    Throughout this document, we've demonstrated the process using a single product with a cost.
+    In practice, this graph is often more complex than that.
+    Figure~\ref{figure:8} demonstrates how cost might come from multiple roots.
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=\linewidth]{./cost-attribution-cost-multiple.png}
+      \caption{Multi-cost example}
+      \label{figure:8}
+    \end{figure}
+
+    Regardless, the process is still the same.
+
+    \begin{gather*}
+      cost(p_{1}) = A_{cost} \times 0.3 \times 0.2 \\
+      cost(p_{2}) = B_{cost} \times 0.6 \times 0.4 \\
+      \\
+      cost(E) = (A_{cost} \times 0.06) + (B_{cost} \times 0.24) \\
+    \end{gather*}
+
   \subsection*{Importance of Modeling}
     Data modeling plays a major role in proper representation of resource consumption.
     While it's easy to apportion resources at a cluster level, it often misses nuances.
@@ -503,11 +525,6 @@
     Eventually consistent systems can leave you in troublesome positions when reconciling cost.
     Indexing labels on the ledger allows for the categorization of edge data.
     The enabled further analysis and grouping into hierarchies, such as your organization structure.
-
-  \subsection*{Multiple Roots}
-    Throughout this document, we've demonstrated the process using a single product with a cost.
-    In practice, this graph is often more complex than that.
-    Regardless, the process is still the same.
 
   \subsection*{Equitable Distribution}
     In some cases, products may not distribute all their resources amongst their consumers.
