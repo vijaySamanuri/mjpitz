@@ -11,7 +11,7 @@
 
 ---
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/_mjpitz_?label=%40_mjpitz_&style=social)](https://twitter.com/_mjpitz_)
+[![Twitter Follow](https://img.shields.io/twitter/follow/myajpitz?label=%40myajpitz&style=social)](https://twitter.com/myajpitz)
 ![google analytics](https://www.google-analytics.com/collect?v=1&tid=UA-172921913-1&cid=555&t=pageview&ec=repo&ea=open&dp=%2F&dt=%2F)
 
 [🔈 pronunciation]: https://www.google.com/search?q=pronunciation+maya
