@@ -18,7 +18,7 @@
   This led to a comprehensive, yet flexible design.
   As a result, its concepts are generic and support both cloud and non-cloud ecosystems.
   The goal is to provide a single view into spend across platforms.
-  It needs to to support a large variety of use cases, from leaders analyzing spend to teams understanding the cost of systems they consume.
+  It needs to support a large variety of use cases, from leaders analyzing spend to teams understanding the cost of systems they consume.
 \end{abstract}
 
 
@@ -47,9 +47,9 @@
   When asked, leaders often need to take time to track down this information.
 
   Solutions like \textit{cloudtamer.io} help organizations better manage their spend on cloud providers~\cite{cloudtamer}.
-  But these solutions often lack visibility into clustered environments.
+  Yet these solutions often lack visibility into clustered environments.
   You can pair this with in cluster solutions like \textit{kubecost} provide visibility into the cost of Kubernetes pods~\cite{kubecost}.
-  But in the end, you wind up back to where you started.
+  In the end, you wind up back to where you started.
   Needing to query several sources for information.
 
   While these account for common cases, it fails to consider less common ones.
@@ -67,14 +67,14 @@
   As we migrated to Kubernetes, teams built out some cost attribution.
   We wanted to report on changes as teams underwent these migrations.
 
-  We raised similar questions as we began our journey to the the cloud.
+  We raised similar questions as we began our journey to the cloud.
   During this time, we considered several solutions.
   Many of them focused on solving in cluster or out of cluster costs, not both.
   To accomplish this, many organizations pair solutions together to fill in gaps.
   However, many platforms lack this capability out of box.
 
   In discovering a lack of comprehensive solutions, we started in on some research.
-  Understanding how information is already being collected and reported was key.
+  Understanding how we collect information and reported on it was key.
   This would allow the solution to hook into many existing sources of information.
   It also needed to be able to allow for other types of solutions later on too.
   The following were some observations about systems that we analyzed.
@@ -98,7 +98,7 @@
   \subsection*{Workloads}
     One or more workloads compose a product
     Workloads represent a variety of processes an organization might run.
-    They can be a long running, public facing web services or background jobs.
+    They can be a long-running, public facing web services or background jobs.
     Workloads can run across a variety of platforms but are often deployed to one.
 
   \subsection*{Resources}
