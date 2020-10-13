@@ -4,7 +4,8 @@
 
 * ✊🏿 Black lives matter
 * 🏳️‍🌈 Diversity makes us stronger
-* 🏢 Principal Engineer at [Indeed] working on infrastructure systems
+* 🏢 Software Engineer at [effx]
+  * Previously Principal Engineer at [Indeed] working on infrastructure systems
 * 💡 Founder of [deps.cloud], a system for navigating and analyzing dependency graphs
 * 💻 Technical writer, [blogger], and presenter
   * Check out my [papers] and [talks]!
@@ -17,7 +18,8 @@
 
 [🔈 pronunciation]: https://www.google.com/search?q=pronunciation+maya
 
-[Indeed]: https://github.com/indeedeng
+[effx]: https://effx.com
+[Indeed]: https://indeed.com
 [deps.cloud]: https://github.com/depscloud
 [she / her]: https://pronoun.is/she
 [blogger]: https://mjpitz.com
