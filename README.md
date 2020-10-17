@@ -4,7 +4,7 @@
 [![Pronouns: she / her](https://img.shields.io/badge/Pronouns-she%2Fher-pink?style=for-the-badge&labelColor=silver)](https://pronoun.is/she)
 
 [![Black Lives Matter](https://img.shields.io/badge/-Black%20Lives%20Matter-gray?style=for-the-badge)](https://blacklivesmatter.com/)
-[![Diversity Makes us Stronger](https://img.shields.io/badge/%F0%9F%8C%88-Diversity%20Makes%20Us%20Stronger-silver?style=for-the-badge&labelColor=silver)](https://www.thetrevorproject.org/)
+[![Diversity Makes us Stronger](https://img.shields.io/badge/-Diversity%20Makes%20Us%20Stronger-violet?style=for-the-badge&labelColor=silver)](https://www.thetrevorproject.org/)
 
 * 🏢 Software Engineer at [effx]
 
