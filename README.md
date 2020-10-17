@@ -1,6 +1,6 @@
 ![banner](https://github.com/mjpitz/mjpitz/raw/main/banner.png)
 
-[![Pronunciation](https://img.shields.io/badge/%F0%9F%94%88-Pronunciation-silver?style=for-the-badge&labelColor=silver)](https://www.google.com/search?q=pronunciation+maya)
+[![Pronunciation](https://img.shields.io/badge/Pronunciation%20%F0%9F%94%88-mai·uh-silver?style=for-the-badge&labelColor=silver)](https://www.google.com/search?q=pronunciation+maya)
 [![Pronouns: she / her](https://img.shields.io/badge/Pronouns-she%2Fher-pink?style=for-the-badge&labelColor=silver)](https://pronoun.is/she)
 
 [![Black Lives Matter](https://img.shields.io/badge/-Black%20Lives%20Matter-gray?style=for-the-badge)](https://blacklivesmatter.com/)
