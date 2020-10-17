@@ -5,7 +5,7 @@
 [![Black Lives Matter](https://img.shields.io/badge/-Black%20Lives%20Matter-gray?style=for-the-badge)](https://blacklivesmatter.com/)
 [![Diversity Makes us Stronger](https://img.shields.io/badge/-Diversity%20Makes%20Us%20Stronger-pink?style=for-the-badge&labelColor=silver)](https://www.thetrevorproject.org/)
 
-#### My Work
+### My Work
 
 [![Blog](https://img.shields.io/badge/-Blog-silver?style=for-the-badge)](https://mjpitz.com)
 [![Papers](https://img.shields.io/badge/-Papers-silver?style=for-the-badge)](https://github.com/mjpitz/mjpitz/tree/main/papers)
@@ -15,7 +15,7 @@
 
 [![](https://img.shields.io/badge/-software%20engineer-white?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADEElEQVRYR72XS0wTURSG/3Mr0EQSl8ZX1IRCNRo3GjcirliSGEJYADFCS4IxUaOwEWVaH4k8fCwIhoIloStcyMKFiQtjibqQrbGtYEJUMK5MkGBLucdMoaWt82yrs5255/v+cx8zQyjgUhQWe+cTvcTwggAwxr9UlfsVhaTdcupwW5cK3zeXGAPhfPZAYtHdHiobtFUMSPlbvvTgmwVmOyYrTlgutvmgZYEU/HNiDJybPANkDneEnHX/RMAkucqUzGj0hCqmSy5gBS6Zu7wh56hduPq84RRYgRNzV3vIOXr4g1KZ3FbZSMQnCeSUhJiEfDrn6pk3EjMUeNISv8UCvToFZBru/tRfDykmQNiV8ywjCUEDkarlXpCiuUV1BQJtqwcFRBRAmYaAzG67OzrgBdFjAEJLliUHozUrHi0JXYGxtngPAfe04Onk2ffc0cFOEEbsSugLtCYCROzJE8hJni9XiISuwHhrYhjEF7IgmTk3WlR2JfQ70JI4R4InNmGGyYvpBDFDIIZLAJoB/ILEQzqE58NNPyornDtiBOzUmnOzPW/aCXAw6lrxEEdxEyBfpiBhHZK95EZwvOV3PYTY3zFZHjADat03kwDDTxylrwD25BTIkigEbGN3LBJH6BsIu/8C/R8JVQB+EN3QTFqkRK2fPSKJhdd+eqk5HakpYDgQE0GA20opcUrhTiKMELC49hPV7x7Qak1kqIEEXwGwHaCpiGv5fmobllqiTuFOuQFPHc3rjOY3Ck1pBcycA6WSyEq+9V6QGAr76JqhQCk6kZ88A2QMhxW6aCpQjIRm8i3i5XAfPbIkYFkC7KFqpI5q3eQbxLVkAq63d2jBskBKYgoOHMVtCLqq8U2wBAe3UxVemMDVBX53RqHregea6Vcxf8QBCJwFwwWBOCRmEcc0HcOKSdtVeHAG8MDgh8VUQM/cQnJTuFq7IIHTCjcw4Vl6n+dLWkmeHlOQQK3Cr4hwRqs7duDFdOA9CMeLSV5cB3zcTUB/toDd5EUJNDWx4/sR9JG6wjfeJYEZwGe02vUW8x9vFsQ0n9DVJwAAAABJRU5ErkJggg==)](https://effx.com/)
 
-#### Social
+### Social
 
 [![Twitter Badge](https://img.shields.io/badge/-myajpitz-white?style=for-the-badge&logo=twitter)](https://twitter.com/myajpitz)
 [![Linkedin Badge](https://img.shields.io/badge/-mjpitz-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mjpitz/)
